@@ -160,7 +160,7 @@ class ClassScannerTest extends TestCase
         $file    = new FileScanner(__DIR__ . '/../TestAsset/BarClass.php');
         $class   = $file->getClass('ZendTest\Code\TestAsset\BarClass');
         $this->assertEquals(10, $class->getLineStart());
-        $this->assertEquals(37, $class->getLineEnd());
+        $this->assertEquals(42, $class->getLineEnd());
     }
 
     public function testClassScannerCanScanAnnotations()
@@ -202,6 +202,7 @@ class ClassScannerTest extends TestCase
         $class->getTraitAliases();
         $this->assertContains('ZendTest\Code\TestAsset\BarTrait', $traitNames);
         $this->assertContains('ZendTest\Code\TestAsset\FooTrait', $traitNames);
+        $this->assertContains('ZendTest\Code\TestAsset\BazTrait', $traitNames);
     }
 
     /**
@@ -305,5 +306,14 @@ class ClassScannerTest extends TestCase
         $class = $file->getClass('ZendTest\Code\TestAsset\FooTrait');
         $this->assertTrue($class->isTrait());
         $this->assertFalse($class->isInstantiable());
+    }
+
+    public function testGetInterfacesFromInterface()
+    {
+        $file  = new FileScanner(__DIR__ . '/../TestAsset/FooInterface.php');
+        $class = $file->getClass('ZendTest\Code\TestAsset\FooInterface');
+        $this->assertTrue($class->isInterface());
+        $this->assertEquals(1, count($class->getInterfaces()));
+        $this->assertEquals('ArrayAccess', $class->getInterfaces()[0]);
     }
 }
